@@ -104,7 +104,7 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
           //new Text("Listen Software Solutions2"),
           //Image.asset('/images/logo.png'),
 
-          new Image(image: AssetImage('logo.png')),
+          new Image(image: AssetImage('images/logo.png')),
           actions: <Widget>[
               IconButton(icon:Icon(Icons.add),
               onPressed: (){debugPrint("Add was pressed");})
@@ -113,7 +113,18 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
 
         ),
         backgroundColor: Colors.lightBlue,
-        body: new Center(child:new Column(mainAxisAlignment: MainAxisAlignment.center,children:<Widget>[new Text("Listen Software Solutions")])),
+        body: new Center(child:new Column(mainAxisAlignment: MainAxisAlignment.center,children:<Widget>
+        [
+          new Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image:  AssetImage('images/marquee-1.jpg'),
+              fit: BoxFit.cover,
+          ))),
+         
+          new Text("Listen Software Solutions"),
+        
+        ])),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           onTap: (index){ debugPrint("you tapped index=$index");},
