@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: LssFrontPageWidget(),
+      //home: LssFrontPageWidget(),
+      home: MasterDetailContainer(),
       routes: <String, WidgetBuilder> {
     '/services': (BuildContext context) => new ServicesWidget(),
     '/guest': (BuildContext context) => new GuestWidget(),
@@ -104,7 +105,7 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
           //new Text("Listen Software Solutions2"),
           //Image.asset('/images/logo.png'),
 
-          new Image(image: AssetImage('images/logo.png')),
+          new Image(image: AssetImage('assets/images/logo.png')),
           actions: <Widget>[
               IconButton(icon:Icon(Icons.add),
               onPressed: (){debugPrint("Add was pressed");})
@@ -113,7 +114,9 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
 
         ),
         backgroundColor: Colors.lightBlue,
-        body: new Center(child:new Column(mainAxisAlignment: MainAxisAlignment.center,children:<Widget>
+        
+       
+body: new Center(child:new Column(mainAxisAlignment: MainAxisAlignment.center,children:<Widget>
         [
           new Container(
           decoration: BoxDecoration(
@@ -125,6 +128,7 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
           new Text("Listen Software Solutions"),
         
         ])),
+
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           onTap: (index){ debugPrint("you tapped index=$index");},
@@ -145,7 +149,11 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
             ]),
  Row(children:<Widget>[
                 IconButton (
-              onPressed: (){ widget.navigateToServices(context);},
+              onPressed: (){
+                
+                
+            //Navigator.push(context, MaterialPageRoute( builder: (context) => DetailPage())); },
+                 widget.navigateToServices(context);},
               icon:Icon(Icons.dashboard),
               
             ),
@@ -188,6 +196,145 @@ class _LssFrontPageWidgetState extends State<LssFrontPageWidget> {
   }
 }
 
+class MasterDetailContainer extends StatelessWidget {
+  @override
+
+  Widget build(BuildContext context) {
+
+    return Container(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+                width:  MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: MasterPage())
+          ],
+        ));
+  }
+
+}
+
+class MasterPage extends StatefulWidget {
+  @override
+  MasterPageState createState() => MasterPageState();
+}
+class MasterPageState extends State<MasterPage> {
+  final items = List<String>.generate(10000, (i) => "Item $i");
+  String selectedItem;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Master'),
+        ),
+        body: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                selected: items[index] == selectedItem,
+                title: Text(items[index]),
+                onTap: () {
+                 
+
+                  setState(() {
+                   selectedItem = items[index];
+                    // To remove the previously selected detail page
+                    while (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
+                      //Navigator.of(context).pushNamed('/services');
+                  
+                   //Navigator.of(context)
+                    //    .push(DetailRoute(builder: (context) {
+                    //  return DetailPage(selectedItem);
+                   // }));
+
+                   Navigator.push(context,
+                   MaterialPageRoute(
+                     builder:(_)=>ItemDetails(item:selectedItem),
+                   ));
+                   
+                  });
+
+                });
+            }));
+  }
+}
+
+class ItemDetails extends StatelessWidget {
+  ItemDetails({@required this.item});
+  final String item;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final Widget content = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          item,
+          style: textTheme.headline,
+        ),
+        
+      ],
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(item),
+      ),
+      body: Center(child: content),
+    );
+  }
+}
+class DetailPage extends StatelessWidget {
+  //DetailPage({Key key, this.item}) : super(key: key);
+  DetailPage(this.item);
+  final String item;
+  @override
+
+  Widget build(BuildContext context) {
+     return Scaffold(
+      body: Column(
+        children: <Widget>[Text("hello world")],
+      ),
+    );
+
+  }
+
+}
+class DetailRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T> {
+
+   bool opaque;
+   Duration transitionDuration;
+
+  DetailRoute({@required this.builder, RouteSettings settings})
+
+      : super(settings: settings);
+
+  final WidgetBuilder builder;
+
+  @override
+
+  Iterable<OverlayEntry> createOverlayEntries() {
+    return [
+      OverlayEntry(builder: (context) {
+        return Positioned(
+            left: 0,
+            top: 0,
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: builder(context)
+            ));
+      })
+    ];
+
+  }
+
+}
 class ContactWidget extends StatelessWidget {
   const ContactWidget({Key key}) : super(key: key);
 
