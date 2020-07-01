@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'widgets/home.dart';
+import 'widgets/about.dart';
+import 'widgets/contact.dart';
+import 'widgets/guest.dart';
+import 'widgets/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -215,57 +220,89 @@ class MasterDetailContainer extends StatelessWidget {
   }
 
 }
+const kTabletBreakpoint=720.0;
+const kDesktopBreakpoint=1400.0;
+const kSideMenuWidth=200;
 
 class MasterPage extends StatefulWidget {
   @override
   MasterPageState createState() => MasterPageState();
 }
 class MasterPageState extends State<MasterPage> {
-  final items = List<String>.generate(10000, (i) => "Item $i");
-  String selectedItem;
+  final _menuItems = _menuItemData();
+
+  MenuItem selectedItem;
+  final _selection = ValueNotifier<MenuItem>(null);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return LayoutBuilder(builder:(context,dimens){
+          if(dimens.maxWidth>=kTabletBreakpoint){
+
+            const kListViewWidth=300.0;
+            return Row(
+              children:<Widget>[
+                Container(
+                  width:kListViewWidth,
+                  child: buildListView((val){
+                    _selection.value=val;
+                  })
+                ),
+                VerticalDivider(width:0),
+                Expanded(
+                  child:ValueListenableBuilder<MenuItem>(
+                      valueListenable: _selection,
+                      builder: (context,menuItem, child){
+                        if(menuItem==null)
+                        {
+                          return HomeWidget();
+                        }
+                        return ItemDetails(item: menuItem);
+                      }
+                  )
+                )
+              ]
+            );
+          }
+          return buildListView((val){
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder:(_) => ItemDetails(item:val)
+              ),
+            );
+          });
+
+    });
+  }    
+    Widget buildListView(ValueChanged<MenuItem> onSelect)
+    {
+      return Scaffold(
         appBar: AppBar(
-          title: Text('Master'),
+          centerTitle:false,
+          title: Text("Menu"),
         ),
-        body: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                selected: items[index] == selectedItem,
-                title: Text(items[index]),
-                onTap: () {
-                 
+        body: ListView.separated(
+          separatorBuilder: (context,index)=> Divider(height:0)
+          , itemCount: _menuItems.length, 
+          itemBuilder: (context,index){
+            final _menuItem= _menuItems[index];
+            return ListTile(
+              leading: Icon(Icons.menu),
+              title: Text(_menuItem.name),
+              onTap:() =>onSelect(_menuItem),
+            );
+          },)
 
-                  setState(() {
-                   selectedItem = items[index];
-                    // To remove the previously selected detail page
-                    while (Navigator.of(context).canPop()) {
-                      Navigator.of(context).pop();
-                    }
-                      //Navigator.of(context).pushNamed('/services');
-                  
-                   //Navigator.of(context)
-                    //    .push(DetailRoute(builder: (context) {
-                    //  return DetailPage(selectedItem);
-                   // }));
-
-                   Navigator.push(context,
-                   MaterialPageRoute(
-                     builder:(_)=>ItemDetails(item:selectedItem),
-                   ));
-                   
-                  });
-
-                });
-            }));
-  }
+      );
+    }
+    
 }
+    
+    
+   
 
 class ItemDetails extends StatelessWidget {
   ItemDetails({@required this.item});
-  final String item;
+  final MenuItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -274,7 +311,7 @@ class ItemDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          item,
+          item.name,
           style: textTheme.headline,
         ),
         
@@ -283,7 +320,7 @@ class ItemDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(item),
+        title: Text(item.name),
       ),
       body: Center(child: content),
     );
@@ -335,43 +372,18 @@ class DetailRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T> {
   }
 
 }
-class ContactWidget extends StatelessWidget {
-  const ContactWidget({Key key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text("Contact"),
-    );
-  }
+class MenuItem
+{
+  final int id;
+  final String name;
+  MenuItem(this.id,this.name);
 }
-class GuestWidget extends StatelessWidget {
-  const GuestWidget({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text("Guest"),
-    );
-  }
-}
-class AboutWidget extends StatelessWidget {
-  const AboutWidget({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text("About"),
-    );
-  }
-}
-class ServicesWidget extends StatelessWidget {
-  const ServicesWidget({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text("Services")
-    );
-  }
+List<MenuItem> _menuItemData(){
+  return[
+    MenuItem(1,"Home"),
+    MenuItem(2,"Services"),
+    MenuItem(3,"Contact"),
+    MenuItem(4,"Guest"),
+  ];
 }
