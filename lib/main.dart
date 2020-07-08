@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lssWebsite2/widgets/businessSolutions.dart';
 import 'widgets/home.dart';
 import 'widgets/about.dart';
 import 'widgets/contact.dart';
 import 'widgets/guest.dart';
 import 'widgets/services.dart';
+import 'widgets/mobile.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
     '/guest': (BuildContext context) => new GuestWidget(),
     '/contact': (BuildContext context) => new ContactWidget(),
     '/about': (BuildContext context) => new AboutWidget(),
+    '/mobile': (BuildContext context) => new MobileWidget(),
+    '/businessSolutions': (BuildContext context)=> new BusinessSolutionWidget(),
       }
     );
   }
@@ -148,7 +152,7 @@ class ItemDetails extends StatelessWidget {
     switch(item.id)
     {
        case 1: return HomeWidget();
-       case 2: return ServicesWidget();
+       case 2: return BusinessSolutionWidget();
        case 3: return ContactWidget();
        case 4: return GuestWidget();
        case 5: return AboutWidget();

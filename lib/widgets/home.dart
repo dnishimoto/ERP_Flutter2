@@ -3,6 +3,7 @@ import 'appBar.dart';
 //import 'dart:math';
 import '../styles.dart';
 import 'dart:math';
+import 'businessSolutions.dart';
 
 class HomeWidget extends StatefulWidget {
   HomeWidget({Key key}) : super(key: key);
@@ -59,10 +60,10 @@ Animation<double> animation;
               duration: Duration(microseconds: 500),
               top:600-animation.value,
               left:600-animation.value,
-              child:Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/c_sharp.jpg'), fit:BoxFit.fitWidth))
+              child:Card(child:Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/c_sharp.jpg'), fit:BoxFit.fitWidth))
               //FlatButton(onPressed: (){},color: Colors.red,child:Text(""),)
               ,
-            )
+            ))
            ,AnimatedPositioned(
              duration: Duration(microseconds: 5000),
              left:450, top:-450+animation.value, child:Text("Meeting all your business needs",style:CustomImageFont))
@@ -94,7 +95,13 @@ Animation<double> animation;
              turns: Tween(begin: 0.0, end: 1.0).animate(controller),
             
             child: 
-          Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/dashboard.png'), fit:BoxFit.fitWidth))
+            Hero(tag:'businessSolutions', child:
+            Container(padding: EdgeInsets.all(20.0) ,width:400, child: 
+            FlatButton(
+              onPressed: (){
+              Navigator.of(context).pushNamed("/businessSolutions");
+            },child:
+              Image(image: AssetImage('/images/dashboard.png'), fit:BoxFit.fitWidth))))
           ,)
           ),
 
@@ -102,11 +109,18 @@ Animation<double> animation;
               duration: Duration(microseconds: 500),
               top:100+animation.value,
               left:0,
-              child:Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/mobile.png'), fit:BoxFit.fitWidth))
-              //FlatButton(onPressed: (){},color: Colors.red,child:Text(""),)
+              child:
+              Hero(tag:'mobile', child:
+            Container(padding: EdgeInsets.all(20.0) ,width:400, child: 
+            FlatButton(
+              //color:Colors.red,
+              onPressed: (){
+              Navigator.of(context).pushNamed("/mobile");
+            },child:
+              Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/mobile.png'), fit:BoxFit.fitWidth))
+              //
               ,
-            )
-
+            ))))
            ,AnimatedPositioned(
              duration: Duration(microseconds: 5000),
               top:800* (600/animation.value), 
@@ -135,16 +149,26 @@ Animation<double> animation;
           Positioned(
             left:450.0,
             top:1000.0,
-            child: Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/david.gif'), fit:BoxFit.fitWidth))
-          ),
+            child: 
+             Hero(tag:'about', child:
+            Container(padding: EdgeInsets.all(20.0) ,width:400, child: 
+            FlatButton(
+              //color:Colors.red,
+              onPressed: (){
+              Navigator.of(context).pushNamed("/about");
+            },child:
+            Container(padding: EdgeInsets.all(20.0) ,width:400, child: Image(image: AssetImage('/images/david.gif'), fit:BoxFit.fitWidth))
+          )))),
           
           Positioned(
             left:0.0,
             top:1400.0,
-            child: Container(
+            child:
+            
+            Card(child:Container(
               width: 850,
             padding: EdgeInsets.all(20.0) , child: Image(image: AssetImage('/images/boise.jpg'), fit:BoxFit.fitWidth))
-          )
+          ))
 
           ]
           ),),),
