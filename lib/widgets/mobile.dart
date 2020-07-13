@@ -3,34 +3,26 @@ import 'appBar.dart';
 import '../styles.dart';
 import 'textSection.dart';
 
-class MobileWidget extends StatelessWidget {
-  const MobileWidget({Key key}) : super(key: key);
+class MobileWidget extends StatefulWidget {
+  MobileWidget({Key key}) : super(key: key);
 
-/*
-  GridView.count(crossAxisCount: 3,children:[
-                GridTile(header:GridTileBar(
-                  title:Text("Single Code base")
-                  ),
-                  child:TextSection("Flutter converts dart code into native ios and android code.")
-                ),
-                 GridTile(header:GridTileBar(
-                  title: Text("Lower costs for Startups"),
-                ),
-                  child:TextSection("Get your idea created fast by using one code base for web, ios, and android. Rapid application development makes flutter a great choice.  Flutter provides a single code base that works flawlessly on multiple platforms.")
-                ),
-                GridTile(header:GridTileBar(
-                  title: Text("Backed by Google"),
-                ),
-                  child:TextSection("Google is investing in flutter creating a rich set of functionality.  At the heart of flutter are widgets.  Widgets provide the look and feel that users are familar with and expect.")
-                )
-                
-              ]);
-              Text("Mobile",style:Header3),
-              TextSection("We build in flutter."),
-              */
+
 
   @override
-  Widget build(BuildContext context) {
+  _MobileWidgetState createState() => _MobileWidgetState();
+}
+
+class _MobileWidgetState extends State<MobileWidget> {
+  @override
+Widget build(BuildContext context) {
+
+  var _crossAxisSpacing = 8;
+var _screenWidth = MediaQuery.of(context).size.width;
+var _crossAxisCount = 3;
+var _width = ( _screenWidth - ((_crossAxisCount - 1) * _crossAxisSpacing)) / _crossAxisCount;
+var cellHeight = 300;
+var _aspectRatio = _width /cellHeight;
+    
     return Scaffold(
         appBar: setAppBar(),
         backgroundColor: Colors.white,
@@ -61,27 +53,43 @@ class MobileWidget extends StatelessWidget {
       GridView.count(
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        crossAxisCount: 3,children:[
+        childAspectRatio: _aspectRatio,
+        crossAxisCount: _crossAxisCount
+        ,children:[
                 GridTile(
                   header:GridTileBar(
                   title:Text("Single Code base"),
                   backgroundColor: Colors.grey,
                   ),
-                  child:Container(alignment:Alignment.topLeft, color: Colors.green[100],padding: const EdgeInsets.fromLTRB(40,5,5,5),
                   child:
-                  Text("Flutter converts dart code into native ios and android code."))
+                  Column( 
+                  children:[
+                  SizedBox(height: 50.0,),
+                   Text("Flutter converts dart code into native ios and android code.")
+                  ])
                 ),
-                 GridTile(header:GridTileBar(
-                  title: Text("Lower costs for Startups"),
+                 GridTile(
+                   header:GridTileBar(
+                   title: Text("Lower costs for Startups"),
                   backgroundColor: Colors.grey,
                 ),
-                  child:Text("Get your idea created fast by using one code base for web, ios, and android. Rapid application development makes flutter a great choice.  Flutter provides a single code base that works flawlessly on multiple platforms.")
+                  child:
+                   Column( 
+                  children:[
+                  SizedBox(height: 50.0,),
+                  Expanded(child:Text("Get your idea created fast by using one code base for web, ios, and android. Rapid application development makes flutter a great choice.  Flutter provides a single code base that works flawlessly on multiple platforms.")
+                   )])
                 ),
                 GridTile(header:GridTileBar(
                   title: Text("Backed by Google"),
                   backgroundColor: Colors.grey,
                 ),
-                  child:Text("Google is investing in flutter creating a rich set of functionality.  At the heart of flutter are widgets.  Widgets provide the look and feel that users are familar with and expect.")
+                  child:
+                   Column( 
+                  children:[
+                  SizedBox(height: 50.0,),
+                  Expanded(child:Text("Google is investing in flutter creating a rich set of functionality.  At the heart of flutter are widgets.  Widgets provide the look and feel that users are familar with and expect.")
+                   )])               
                 )
                 
               ]))
