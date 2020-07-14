@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.indigo,
       ),
-      //home: LssFrontPageWidget(),
-      home: MasterDetailContainer(),
+      //home: MasterDetailContainer(),
+      home:HomeWidget(),
       routes: <String, WidgetBuilder> {
     '/home': (BuildContext context) => new HomeWidget(),
     '/services': (BuildContext context) => new ServicesWidget(),
